@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Pacifico|Roboto" rel="stylesheet">
+</head>
+<style type="text/css">
+	html {
+		font-size: 100%;
+	}
+	:root{
+		--background: rgba(255, 51, 153, 0.85);
+	}
+	*, *::before, *::after {
+		box-sizing: border-box;
+	}
+	body {
+		margin: 0;
+		background-color: white;
+		font-family: 'Roboto', sans-serif;
+	}
+	h2 {
+		text-align: center;
+		margin-top: 2em;
+		font-size: 2em;
+		font-family: 'Pacifico', sans-serif;
+	}
+	header {
+		background:var(--background);
+		font-family: 'Roboto', sans-serif;
+		text-align: center;
+		position: fixed;
+		top:0;
+		z-index: 999;
+		width: 100%;
+	}
+	.small-text {
+		font-size: 0.9em;
+	}
+	.bolder-text {
+		font-weight: bolder;
+	}
+	.nav-toggle {
+		display: none;
+	}
+	.nav-toggle-label{
+		position: absolute;
+		top: 0;
+		left: 0;
+		margin-left: 1em;
+		height: 100%;
+		display: flex;
+		align-items: center;
+	}
+	.nav-toggle-label span,
+	.nav-toggle-label span::before,
+	.nav-toggle-label span::after {
+		display: block;
+		background: white;
+		height: 2px;
+		width: 2em;
+		border-radius: 2px;
+		position: relative;
+	}
+
+	.nav-toggle-label span::before,
+	.nav-toggle-label span::after {
+		content: '';
+		position: absolute;
+	}
+
+	.nav-toggle-label span::before {
+		bottom: 7px;
+	}
+	.nav-toggle-label span::after {
+		top: 7px;
+	}
+	nav {
+		position: absolute;
+		text-align: left;
+		top: 100%;
+		left: 0;
+		background: var(--background);
+		width: 100%;
+		transform: scale(1,0);
+		transform-origin: top;
+		transition: transform 400ms ease-in-out;
+	}
+	nav ul{
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.nav-link{
+		margin-bottom: 1em;
+		margin-left: 1em; 
+	}
+	nav a {
+		color: white;
+		text-decoration: none;
+		font-size: 1.2rem;
+		text-transform: uppercase;
+		opacity: 0;
+		transition: opacity 150ms ease-in-out;
+	}
+	nav a:hover {
+		color: rgb(255, 204, 230);
+	}
+	.logo {
+		font-family: 'Pacifico', sans-serif;
+		margin: .2em;
+	}
+	.nav-toggle:checked ~ nav {
+		transform: scale(1,1);
+	}
+	.nav-toggle:checked ~ nav a {
+		opacity: 1;
+		transition: opacity 250ms ease-in-out 250ms;
+	}
+
+	@media screen and (min-width: 1000px) {
+		.nav-toggle-label {
+			display: none;
+		}
+		header {
+			display: grid;
+			grid-template-columns: 1fr auto minmax(600px, 3fr) 1fr;
+		}
+		.logo {
+			grid-column: 2 / span 1;
+		}
+		nav {
+			all: unset;
+			grid-column: 3 / 4;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+		}
+
+		nav ul {
+			display: flex;
+			justify-content: flex-end;
+		}
+		.nav-link {
+			margin-left: 2em;
+			margin-bottom: 0;
+		}
+		nav a {
+			opacity: 1;
+			position: relative;
+		}
+		nav a::before {
+			content: '';
+			display: block;
+			height: 5px;
+			background: black;
+			position: absolute;
+			top: -.76em;
+			left: 0;
+			right: 0;
+			transform: scale(0,1);
+			transition: transform ease-in-out 250ms;
+		}
+		nav a:hover::before {
+			transform: scale(1,1);
+		}
+	}
+	.main {
+		margin-top: 6em;
+		text-align: center;
+	}
+	form {
+		line-height: 0.5em;
+	}
+	@media only screen and (max-device-width: 420px){
+	.small-text {
+		font-size: 1em;
+	}
+	form b {
+		font-size: 1em;
+	}
+	}
+	#header-img {
+		height: 1em;
+	}
+	.ingredients {
+		text-align: left;
+		padding: 0 6em 0 1em;
+	}
+	.ingredients ul {
+		list-style: none; 
+	}
+	.ingredients ul li {
+		margin-top: 3em; 
+		display: inline-grid;
+		grid-template-columns: 8em auto;
+		grid-column-gap: 1em;
+		font-weight: lighter;
+	}
+	.ingredients ul li b{
+		font-family: 'Roboto', sans-serif;
+		font-weight: bold;
+	}
+	.ingredients ul li img {
+		margin-top: 1em;
+		height: auto;
+		width: 8em;
+	}
+	#create {
+		margin-bottom: 2em;
+	}
+	.create {
+		display: grid;
+		margin: 1em 2em 5em 2em;
+		grid-template-rows: auto;
+		grid-template-columns: 1fr 1fr 1fr;	
+		grid-column-gap: 1em;
+	}
+	.step-box {
+		border-style: solid;
+		border-width: 4px;
+		border-color: grey;
+		border-radius: 5px;
+		background-color: rgb(239, 239, 239);
+		box-shadow: .3em .3em .3em .1em grey;
+		display: grid;
+		grid-template-rows: 1fr 1.5fr auto 3fr;
+	}
+	@media only screen and (max-device-width: 1120px) {
+		.step-box {
+		grid-template-rows: 0.2fr .5fr auto 1fr;
+		}
+	}
+	.step-number {
+		float: left;
+		margin: .3em;
+	}
+	.step-pricing {
+		float: right;
+		margin: .3em;
+	}
+	.step-headline {
+		font-weight: bolder;
+		align-self: center;
+	}
+	.step-icon-container {
+		background-color: white;
+	}
+	.step-icon {
+		width: 6em;
+		height: 4em;
+		margin-top: .6em;
+	}
+	.step-description {
+		font-size: .9rem;
+		align-self: center;
+		font-style: italic;
+	}
+	.video-box {
+		margin-top: 14em;
+		grid-column: span 3;
+	}
+	.combos {
+		display: grid;
+		margin: 3em 2em 5em 2em;
+		grid-template-columns: 1fr 1fr 1fr;	
+		grid-column-gap: 1em;
+	}
+	.combo-box {
+		border-style: solid;
+		border-width: 4px;
+		border-color: grey;
+		border-radius: 5px;
+		background-color: rgb(239, 239, 239);
+		box-shadow: .3em .3em .3em .1em grey;
+		display: grid;
+		grid-template-rows: 1fr 3fr 1fr;
+	}
+	.combo-headline {
+		font-weight: bolder;
+		align-self: center;
+	}
+	.combo-icon-container {
+		background-color: white;
+	}
+	.combo-icon {
+		width: 6em;
+		height: 4em;
+		margin-top: .6em;
+	}
+	.combo-description {
+		font-size: .9em;
+		align-self: center;
+		font-style: italic;
+	}
+	.contact {
+		display: flex;
+	}
+	.contact-text {
+		margin: 3em;
+		padding: 2em;
+		border-style: solid;
+		float: left;
+		text-align: left;
+	}
+	.contact-map {
+		width: 100%;
+		height: auto;
+		margin: 3em;
+		padding: 2em;
+		float: right;
+	}
+	.social-media-icons {
+		width: 3em;
+		height: auto;
+	}
+	@media screen and (max-width:  847px){
+		.contact {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		.contact-text {
+		margin: 0;
+		padding: 2em;
+		border-style: solid;
+		float: none;
+	}
+	.contact-map {
+		width: 85%;
+		height: auto;
+		padding: 2em;
+		margin: 0;
+		float: none;
+	}
+	}
+</style>
+<body>
+<header id="header">
+	<h1 class="logo">Customizable Bubbletea <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsjJbU0x-jTQEh82yCHcbmXXBMzx-bS5BoAMSs_BqZDMsaIK7X" id="header-img"></h1>
+	<input type="checkbox" id="nav-toggle" class="nav-toggle">
+	<nav id="nav-bar">
+		<ul>
+			<li class="nav-link"><a href="#ingredients">Ingredients</a></li>
+			<li class="nav-link"><a href="#create">Create</a></li>
+			<li class="nav-link"><a href="#combos">Combos</a></li>
+			<li class="nav-link"><a href="#contact">Contact</a></li>
+		</ul>
+	</nav>
+	<label for="nav-toggle" class="nav-toggle-label">
+		<span></span>
+	</label>
+</header>
+<main class="main">
+	<form id="form">
+	<p><b>Handcrafted Original Bubbleteas are at your fingertip.</b></p>
+	<p class="small-text">Sign up below:</p>
+	<input id="email" type="email" name="" placeholder="Enter your email">
+	<input type="submit" name="" value="Submit" id="submit" formmethod="post" formaction="https://www.freecodecamp.com/email-submit">
+	</form>
+	<div class="ingredients" id="ingredients">
+		<h2>Ingredients</h2>
+		<ul>
+			<li>
+				<img src="https://i.imgur.com/RIfbj6L.png">
+				<p>
+				<b>Fresh</b> <br> <br>
+				All ingredients are fresh and juicy! We guarantee our high standard by using only the best fruits and dairy from local suppliers.
+				</p>
+			</li>
+			<li>
+				<img src="https://i.imgur.com/Ob6RcTH.png">
+				<p>
+				<b>Tasty</b><br><br>
+				A cup of pure delight! Love and dedication is put into the making of every cup to guarantee 100% tastyness.
+				</p>
+			</li>
+			<li>
+				<img src="https://i.imgur.com/AyqGMNh.png">
+				<p>
+				<b>Swift</b> <br> <br>
+				15 Minutes Delivery. That's our promise. Delayed deliveries are for free!
+				</p>
+			</li>
+		</ul>
+	</div>
+	<div class="video-box">
+			<iframe width="560" height="315" src="https://www.youtube.com/embed/1I5fa2GVlLA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		</div>
+	<h2 id="create">Create</h2>
+	<div class="create">
+		<div class="step-box step-1">
+			<div>
+			<div class="step-pricing">3$ /cup</div>
+			<div class="step-number">1.</div>
+			</div>
+			<div class="step-headline">Choose Main Flavour</div>
+			<div class="step-icon-container">
+				<img class="step-icon" src="https://i.imgur.com/Q8YNFuo.png">
+			 	<img class="step-icon" src="https://i.imgur.com/3MtVblc.png">
+				<img class="step-icon" src="https://i.imgur.com/RYq5r5R.png">
+				<img class="step-icon" src="https://i.imgur.com/uh12xrG.png">
+			</div>
+			<div class="step-description">Click on the icon to select the flavour of your bubble-tea.</div>
+		</div>
+		<div class="step-box step-2">
+			<div>
+			<div class="step-pricing">50c /topping</div>
+			<div class="step-number">2.</div>
+			</div>
+			<div class="step-headline">Add Toppings</div>
+			 <div class="step-icon-container">
+			 	<img class="step-icon" src="https://i.imgur.com/tkj4IKp.png">
+				<img class="step-icon" src="https://i.imgur.com/ytPZUYw.png">
+				<img class="step-icon" src="https://i.imgur.com/rMJCcNg.png">
+				<img class="step-icon" src="https://i.imgur.com/COGFOLD.png">
+			</div>
+			<div class="step-description">Click on the toppings you want to have in your bubble-tea.</div>
+		</div>
+		<div class="step-box step-3">
+			<div>
+			<div class="step-pricing">free</div>
+			<div class="step-number">3.</div>
+			</div>
+			<div class="step-headline">Add Ice</div>
+			<div class="step-icon-container">
+				<img class="step-icon" src="https://i.imgur.com/4TALkvg.png">
+				<img class="step-icon" src="https://i.imgur.com/C9RMrQQ.png">
+				<img class="step-icon" src="https://i.imgur.com/mm4JGD7.png">
+				<img class="step-icon" src="https://i.imgur.com/Qr4Bx2p.png">
+			</div>
+			<div class="step-description">Click on an icon to select the temperature of your bubble-tea.</div>
+		</div>
+	</div>
+	<h2 id="combos">Combos</h2>
+	<div class="combos">
+		<div class="combo-box">
+			<div class="combo-headline">Free Topping</div>
+			<div class="combo-icon-container">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/tIZIIdd.png">
+				<img class="combo-icon" src="https://i.imgur.com/ytPZUYw.png">
+			</div>
+			<div class="combo-description">Buy 2 Cups and get 1 Topping for free!</div>
+		</div>
+		<div class="combo-box">
+			<div class="combo-headline">4 for 3 Special</div>
+			<div class="combo-icon-container">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/tIZIIdd.png">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+			</div>
+			<div class="combo-description">Buy 3 Cups and get 1 Cup for free!</div>
+		</div>
+		<div class="combo-box">
+			<div class="combo-headline">Family Special</div>
+			<div class="combo-icon-container">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/tIZIIdd.png">
+				<img class="combo-icon" src="https://i.imgur.com/suGtDsM.png">
+				<img class="combo-icon" src="https://i.imgur.com/ytPZUYw.png">
+			</div>
+			<div class="combo-description">Buy 3 Cups and get 1 Cup and 1 Topping for free!</div>
+		</div>
+	</div>
+	<h2 id="contact">Contact</h2>
+	<div class="contact">
+		<div class="contact-text">
+			<p>Customizable Bubbletea Ltd.</p>
+			<p>Phone: 123 4567 8901 </p>
+			<p>Email Address: CustomizableBubbleatea@xyz.de</p>
+			<p>Address: 
+			735 2nd Stree 
+			El Dorado, AR 71730</p>
+			<a href="http://www.twitter.com"><img class="social-media-icons" src="https://i.imgur.com/5TImhFE.png"/><a/>
+			<a href="http://www.instagram.com"><img class="social-media-icons" src="https://i.imgur.com/FzmtQCk.png"><a/>
+			<a href="http://www.facebook.com"><img class="social-media-icons" src="https://i.imgur.com/qPv9S37.png"><a/>
+		</div>
+			<img class="contact-map" src="https://i.imgur.com/N6Ra9W7.png">
+		
+	</div>
+</main>
+</body>
+</html>
